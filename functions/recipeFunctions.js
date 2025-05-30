@@ -1,4 +1,4 @@
-import { db } from './firebase';
+import { db } from '../firebase/firebaseConfig';
 import { collection, getDocs } from 'firebase/firestore';
 
 export const matchRecipesToInventory = async (userId) => {
