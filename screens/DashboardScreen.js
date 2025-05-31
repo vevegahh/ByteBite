@@ -20,8 +20,9 @@ export default function DashboardScreen() {
     const fetchData = async () => {
         if (!userId) return;
         try {
-            const expiring = await getExpiringItems(userId);
-            setExpiringItems(expiring);
+
+            const orderedInventory = await getInventory(userId);
+            setExpiringItems(orderedInventory); // now this is your full list, ordered by expiry
 
             const inventory = await getInventory(userId);
             const ingredientNames = inventory.map(item => item.name.toLowerCase());
