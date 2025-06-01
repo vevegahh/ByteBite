@@ -1,116 +1,211 @@
+// SignupScreen.js – Updated to match latest Figma design
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Alert,
+    Image,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { registerUser } from '../authFunctions';
+import { Ionicons } from '@expo/vector-icons';
+import { doc, setDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
 
-export default function SignupScreen({ navigation }) {
+export default function SignupScreen() {
+    const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [secureText, setSecureText] = useState(true);
 
-    const handleSignUp = async () => {
+    const handleSignup = async () => {
         try {
-            const user = await registerUser(email, password);
-            console.log('Signed up as:', user.email);
-            navigation.navigate('Dashboard'); // redirect after signup
+            const userCred = await registerUser(email, password);
+            await setDoc(doc(db, 'users', userCred.user.uid), { email });
+            navigation.navigate('DietPreferences');
         } catch (error) {
             Alert.alert('Signup failed', error.message);
         }
     };
 
+    const handleGoogleSignup = () => {
+        Alert.alert('Google Sign Up', 'Feature coming soon');
+    };
+
     return (
         <View style={styles.container}>
-            <Text style={styles.logo}>ByteBite</Text>
+            <Image source={require('../assets/bytebite_logo.png')} style={styles.logo} />
 
+            <Text style={styles.title}>Create an account</Text>
+
+            <View style={styles.stepsContainer}>
+                <View style={[styles.stepCircle, styles.activeStep]}><Text style={styles.stepText}>1</Text></View>
+                <View style={styles.stepLine} />
+                <View style={[styles.stepCircle, styles.inactiveStep]}><Text style={styles.stepText}>2</Text></View>
+                <View style={styles.stepLine} />
+                <View style={[styles.stepCircle, styles.inactiveStep]}><Text style={styles.stepText}>3</Text></View>
+            </View>
+
+            <Text style={styles.label}>Email</Text>
             <TextInput
                 style={styles.input}
-                placeholder="Email"
-                autoCapitalize="none"
+                placeholder="example@gmail.com"
+                placeholderTextColor="#888"
                 value={email}
                 onChangeText={setEmail}
             />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
-            />
+            <Text style={styles.label}>Password</Text>
+            <View style={styles.passwordContainer}>
+                <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Enter Your Password"
+                    placeholderTextColor="#888"
+                    secureTextEntry={secureText}
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                <TouchableOpacity onPress={() => setSecureText(!secureText)}>
+                    <Ionicons
+                        name={secureText ? 'eye-off-outline' : 'eye-outline'}
+                        size={20}
+                        color="#666"
+                    />
+                </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={styles.signupBtn} onPress={handleSignUp}>
-                <Text style={styles.signupText}>Let’s get started!</Text>
+            <TouchableOpacity style={styles.signupBtn} onPress={handleSignup}>
+                <Text style={styles.signupText}>Continue</Text>
             </TouchableOpacity>
 
-            <Text style={styles.or}>or continue with</Text>
+            <Text style={styles.orText}>────────  or continue with  ────────</Text>
 
-            <TouchableOpacity style={styles.googleBtn}>
-                <Text style={styles.googleText}>Signup with Google</Text>
+            <TouchableOpacity onPress={handleGoogleSignup}>
+                <Image source={require('../assets/google_button.png')} style={styles.googleImage} />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.loginLink}>Already have an account? Login</Text>
-            </TouchableOpacity>
+            <Text style={styles.footerText}>
+                Already have an account?{' '}
+                <Text style={styles.loginLink} onPress={() => navigation.navigate('Login')}>
+                    Log in
+                </Text>
+            </Text>
         </View>
     );
 }
+
+const CIRCLE_SIZE = 28;
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 20,
+        backgroundColor: '#FFFEF4',
+        padding: 24,
     },
     logo: {
-        fontSize: 32,
+        width: 80,
+        height: 80,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+        marginBottom: 16,
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: '700',
+        textAlign: 'center',
+        marginBottom: 24,
+        color: '#000',
+    },
+    stepsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 24,
+    },
+    stepCircle: {
+        width: CIRCLE_SIZE,
+        height: CIRCLE_SIZE,
+        borderRadius: CIRCLE_SIZE / 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    activeStep: {
+        backgroundColor: '#F4C430',
+    },
+    inactiveStep: {
+        backgroundColor: '#aaa',
+    },
+    stepText: {
+        color: '#fff',
         fontWeight: 'bold',
-        marginBottom: 40,
-        color: '#333',
+    },
+    stepLine: {
+        width: 30,
+        height: 2,
+        backgroundColor: '#F4C430',
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: '500',
+        marginTop: 12,
+        marginBottom: 6,
+        color: '#000',
     },
     input: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#f1f1f1',
+        borderWidth: 1,
+        borderColor: '#ccc',
         borderRadius: 8,
-        paddingHorizontal: 15,
-        marginBottom: 20,
-        fontSize: 16,
+        padding: 12,
+        fontSize: 15,
+    },
+    passwordContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 8,
+        paddingHorizontal: 12,
+        marginBottom: 24,
+    },
+    passwordInput: {
+        flex: 1,
+        height: 48,
+        fontSize: 15,
     },
     signupBtn: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#007BFF',
-        justifyContent: 'center',
-        alignItems: 'center',
+        backgroundColor: '#FFD700',
+        paddingVertical: 14,
         borderRadius: 8,
-        marginBottom: 20,
+        alignItems: 'center',
+        marginBottom: 24,
     },
     signupText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    or: {
         fontSize: 16,
-        color: '#666',
-        marginVertical: 20,
+        fontWeight: '600',
+        color: '#000',
     },
-    googleBtn: {
-        width: '100%',
-        height: 50,
-        backgroundColor: '#DB4437',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        marginBottom: 20,
+    orText: {
+        textAlign: 'center',
+        fontSize: 13,
+        color: '#555',
+        marginBottom: 12,
     },
-    googleText: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
+    googleImage: {
+        width: 36,
+        height: 36,
+        alignSelf: 'center',
+        marginBottom: 24,
+    },
+    footerText: {
+        textAlign: 'center',
+        fontSize: 14,
+        color: '#000',
     },
     loginLink: {
-        fontSize: 16,
-        color: '#007BFF',
-        marginTop: 20,
+        color: '#007AFF',
+        fontWeight: '500',
     },
 });
