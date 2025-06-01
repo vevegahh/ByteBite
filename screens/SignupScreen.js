@@ -9,11 +9,13 @@ import {
     Alert,
     Image,
 } from 'react-native';
+
 import { useNavigation } from '@react-navigation/native';
-import { registerUser } from '../authFunctions';
 import { Ionicons } from '@expo/vector-icons';
+import { registerUser } from '../functions/authFunctions';
 import { doc, setDoc } from 'firebase/firestore';
-import { db, auth } from '../firebase';
+import { db, auth } from '../firebase/firebase';
+
 
 export default function SignupScreen() {
     const navigation = useNavigation();

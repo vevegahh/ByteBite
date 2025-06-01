@@ -10,7 +10,7 @@ import {
     Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { auth, db } from '../firebase';
+import { auth, db } from '../firebase/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 
 const DIET_OPTIONS = [

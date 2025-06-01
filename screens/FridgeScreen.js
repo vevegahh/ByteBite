@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import { getInventory, deleteItem } from '../inventoryFunctions'; // You should already have this
+import { getIngredients, deleteIngredient } from '../functions/ingredientService';
 import { useNavigation } from '@react-navigation/native';
-
-import { auth } from '../firebase'; // adjust the path if needed
-
-const userId = auth.currentUser?.uid;
-
+import { auth } from '../firebase/firebase';
 
 export default function FridgeScreen() {
     const [inventory, setInventory] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
+    const userId = auth.currentUser?.uid;
 
     useEffect(() => {
         fetchInventory();
@@ -19,7 +16,7 @@ export default function FridgeScreen() {
 
     const fetchInventory = async () => {
         try {
-            const data = await getInventory(userId);
+            const data = await getIngredients(userId);
             setInventory(data);
             setLoading(false);
         } catch (err) {
@@ -30,9 +27,9 @@ export default function FridgeScreen() {
 
     const handleDelete = async (itemId) => {
         try {
-            await deleteItem(userId, itemId);
+            await deleteIngredient(userId, itemId);
             Alert.alert('Deleted', 'Item removed from fridge');
-            fetchInventory(); // Refresh list
+            fetchInventory();
         } catch (err) {
             console.error('Delete failed:', err);
         }
@@ -60,14 +57,12 @@ export default function FridgeScreen() {
     return (
         <View style={styles.container}>
             <Text style={styles.header}>My Fridge</Text>
-
             <FlatList
                 data={inventory}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 contentContainerStyle={{ paddingBottom: 100 }}
             />
-
             <TouchableOpacity
                 style={styles.addBtn}
                 onPress={() => navigation.navigate('AddItem')}

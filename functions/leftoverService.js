@@ -1,4 +1,4 @@
-import { db } from '../firebase/firebaseConfig';
+import { db } from '../firebase/firebase';
 import { collection, addDoc, getDocs, doc, deleteDoc } from 'firebase/firestore';
 
 export const addLeftover = async (userId, item) => {

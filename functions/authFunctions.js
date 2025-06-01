@@ -1,5 +1,5 @@
 // authFunctions.js
-import { auth } from '../firebase/firebaseConfig';
+import { auth } from '../firebase/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 // Sign up a new user

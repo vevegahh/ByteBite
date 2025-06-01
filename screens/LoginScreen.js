@@ -10,7 +10,7 @@ import {
     CheckBox,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { loginUser } from '../authFunctions';
+import { loginUser } from '../functions/authFunctions';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen() {
