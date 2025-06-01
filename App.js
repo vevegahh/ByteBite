@@ -1,8 +1,7 @@
-// CORRECT
-//import HomeScreen from './HomeScreen'; 
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+
 import FrontScreen from './screens/FrontScreen';
 import SignupScreen from './screens/SignupScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -16,22 +15,21 @@ import RecipeDetailScreen from './screens/RecipeDetailScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator
-                initialRouteName="Front"
-                screenOptions={{ headerShown: false }}
-            >
-                <Stack.Screen name="Front" component={FrontScreen} />
-                <Stack.Screen name="Signup" component={SignupScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="DietPreferences" component={DietPreferencesScreen} />
-                <Stack.Screen name="CuisinePreferences" component={CuisinePreferencesScreen} />
-                <Stack.Screen name="Dashboard" component={DashboardScreen} />
-                <Stack.Screen name="Fridge" component={FridgeScreen} />
-                <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} />
-                {/* Add screens like AddItem or Finish if needed */}
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <Stack.Navigator
+        initialRouteName="Front"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="Front" component={FrontScreen} />
+        <Stack.Screen name="Signup" component={SignupScreen} />
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="DietPreferences" component={DietPreferencesScreen} />
+        <Stack.Screen name="CuisinePreferences" component={CuisinePreferencesScreen} />
+        <Stack.Screen name="Dashboard" component={DashboardScreen} />
+        <Stack.Screen name="Fridge" component={FridgeScreen} />
+        <Stack.Screen name="RecipeDetail" component={RecipeDetailScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }

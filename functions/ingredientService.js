@@ -1,4 +1,4 @@
-import { db } from '../firebase/firebase';
+import { db } from '../firebase';
 import { collection, addDoc, getDocs, doc, deleteDoc, query, where, orderBy } from 'firebase/firestore';
 
 export const addIngredient = async (userId, item) => {

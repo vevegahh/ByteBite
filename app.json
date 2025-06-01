@@ -1,0 +1,19 @@
+{
+    "expo": {
+      "name": "ByteBite",
+      "slug": "bytebite",
+      "version": "1.0.0",
+      "sdkVersion": "53.0.0",
+      "platforms": ["ios", "android"],
+      "orientation": "portrait",
+      "icon": "./assets/bytebite_logo.png",
+      "userInterfaceStyle": "light",
+      "splash": {
+        "image": "./assets/bytebite_logo.png", 
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      },
+      "assetBundlePatterns": ["**/*"]
+    }
+  }
+  

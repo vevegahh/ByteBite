@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import { getIngredients, deleteIngredient } from '../functions/ingredientService';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../firebase/firebase';
+import { auth } from '../firebase';
 
 export default function FridgeScreen() {
     const [inventory, setInventory] = useState([]);

@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, 
 import { useNavigation } from '@react-navigation/native';
 import { getExpiringItems, getIngredients } from '../functions/ingredientService';
 import { getRecipeSuggestions } from '../functions/recipeFunctions';
-import { auth } from '../firebase/firebase';
+import { auth } from '../firebase';
 
 export default function DashboardScreen() {
     const [expiringItems, setExpiringItems] = useState([]);
